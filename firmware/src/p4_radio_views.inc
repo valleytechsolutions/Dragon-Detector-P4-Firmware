@@ -3,12 +3,39 @@ static lv_obj_t *p4RadioStateLabel=nullptr, *p4RadioDetailLabel=nullptr;
 static lv_obj_t *p4ChannelBars[7], *p4ChannelValues[7], *p4ChannelNumbers[7];
 static constexpr int p4BankFirst=-22600, p4BankLast=-22601, p4ModeBase=-22610;
 static constexpr int p4OpenProfiles=-22619, p4ProfileBase=-22620;
+static constexpr int p4InspectContact=-22624;
 static constexpr const char* p4ProfileNames[]={"Dragon Radar","Axon Watch","ALPR Watch","Sky Watch"};
 
 static lv_obj_t* p4Centered(const char* text,int y,int width,const lv_font_t* font){
   auto *obj=label(root,text,(360-width)/2,y,width,font);
   lv_obj_set_style_text_align(obj,LV_TEXT_ALIGN_CENTER,0);
   return obj;
+}
+
+// Legacy advertising service identifiers are transmitted least-significant byte first.
+static void p4ListAdvertisedServices(String& text,const dragon::notebook::Advert& advert){
+  for(size_t offset=0;offset<advert.boundary;){
+    const unsigned length=advert.data[offset++];
+    if(!length || length>advert.boundary-offset)break;
+    const uint8_t type=advert.data[offset];
+    const size_t width=(type==2 || type==3 || type==0x16)?2:
+                       (type==4 || type==5 || type==0x20)?4:
+                       (type==6 || type==7 || type==0x21)?16:0;
+    const bool serviceData=type==0x16 || type==0x20 || type==0x21;
+    const size_t bytes=length-1;
+    if(width && (serviceData || bytes%width==0)){
+      for(size_t pos=0;pos+width<=bytes;pos+=width){
+        const uint8_t* uuid=advert.data+offset+1+pos;
+        text+="\nService UUID: ";
+        for(size_t i=width;i>0;--i){
+          char pair[3];snprintf(pair,sizeof(pair),"%02X",unsigned(uuid[i-1]));text+=pair;
+          if(width==16 && (i==13 || i==11 || i==9 || i==7))text+='-';
+        }
+        if(serviceData)break;
+      }
+    }
+    offset+=length;
+  }
 }
 
 static void p4RefreshRadioPage(bool force){
@@ -99,8 +126,9 @@ static bool p4BuildRadioPage(){
     title("BLE LAB","Passive discovery");
     p4RadioStateLabel=p4Centered("",94,248,F14);
     p4RadioDetailLabel=p4Centered("",124,248,F12);
-    button(root,"Observed devices",75,164,210,41,int(p4ui::Action::BleContacts));
-    button(root,"BLE Beacon Scan",75,215,210,41,int(p4ui::Action::Beacons));
+    button(root,"Advertisement inspector",65,152,230,37,155);
+    button(root,"Observed devices",75,196,210,37,int(p4ui::Action::BleContacts));
+    button(root,"BLE Beacon Scan",75,240,210,37,int(p4ui::Action::Beacons));
   }else if(page==P4More){
     title("MORE");
     button(root,"Alerts",58,115,117,44,22);button(root,"Notebook",184,115,117,44,153);
@@ -118,6 +146,20 @@ static bool p4BuildRadioPage(){
 }
 
 static bool p4RadioAction(int id){
+  if(page==Details && id==p4InspectContact){
+    if(selectionValid() && selectedBle && notebookAdverts){
+      for(unsigned i=0;i<dragon::notebook::Capacity;++i){
+        const auto& advert=notebookAdverts[i];
+        if(advert.used && advert.type==selectedType && !memcmp(advert.mac,selectedMac,6)){
+          notebookSelection=advert;
+          go(NotebookDetail);
+          return true;
+        }
+      }
+    }
+    p4Message("ADVERTISEMENT","No complete advertisement is available for this contact yet.");
+    return true;
+  }
   if(page==P4Modes && id==p4OpenProfiles){go(P4Profiles);return true;}
   if(page==P4Profiles && id<=p4ProfileBase && id>=p4ProfileBase-3){
     const unsigned next=unsigned(p4ProfileBase-id);
