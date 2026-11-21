@@ -1,0 +1,13 @@
+# Credits and source notices
+
+Dragon Detector is by Your Pal Kal / Valleytech Custom Solutions. The original application files carry the project’s existing MIT license. The third-party source and driver tables retain their upstream terms. [Dragon Detector license](LICENSE)
+
+| Component | Source and applicable notices |
+| --- | --- |
+| Board adapter | Waveshare’s CO5300 initialization sequence and MIPI-DSI timing, rotary debounce and haptic patterns, system timer repair, ES8389 playback setup and ES7210 microphone register values informed the original Dragon Detector integration. The Waveshare audio component adapts Espressif’s `esp_codec_dev`. Copyright 2026 Waveshare. [Board reference](https://docs.waveshare.com/ESP32-P4-Knob-Touch-AMOLED-1.75X) · [Apache-2.0](docs/licenses/Waveshare-Apache-2.0.txt) |
+| SDIO and Bluetooth | Espressif’s `esp-extconn` provides the ESP32 companion transport. ESP-IDF supplies the Wi-Fi API and Bluedroid host. The Dragon Detector passive reader and window handling are application code. [Espressif component](https://components.espressif.com/components/espressif/esp-extconn) · [Component license](docs/licenses/Espressif-extconn-Apache-2.0.txt) |
+| Component registration | h2zero’s `esp-nimble-cpp` 2.6.0 is the source of the retained component registration and settings. For this P4 configuration the Bluedroid branch registers a small placeholder translation unit. The component’s existing credits and license are included. [NOTICE](hardware/waveshare-p4-knob-175/components/esp-nimble-cpp/NOTICE) · [Apache-2.0](hardware/waveshare-p4-knob-175/components/esp-nimble-cpp/LICENSE) |
+| Touch and power | The hardware adapter uses Lewis He’s SensorLib and XPowersLib through their public APIs. [SensorLib license](docs/licenses/SensorLib-MIT.txt) · [XPowersLib license](docs/licenses/XPowersLib-MIT.txt) |
+| USB | The board integration links the TinyUSB library from the Arduino-ESP32 packages. TinyUSB is by Ha Thach and contributors under MIT. [TinyUSB](https://github.com/hathach/tinyusb) |
+| MP3 decoding | Chris Morgan’s `esp-libhelix-mp3` packages the RealNetworks Helix decoder. The wrapper uses Apache-2.0 and the decoder has its own licensing terms. The recorder and playback integration in this source checkpoint are Dragon Detector code. [Wrapper license](docs/licenses/ESP-Libhelix-Wrapper-Apache-2.0.txt) · [Decoder notice](docs/licenses/Helix-Decoder-Notice.txt) · [RPSL](docs/licenses/Helix-RPSL.txt) · [RCSL](docs/licenses/Helix-RCSL.txt) |
+| On-device instruments | The Wi-Fi Channel Visualizer and BLE Beacon Scan are Dragon Detector implementations of instruments featured by 7h30th3r0n3 in Evil-M5Project. [Upstream project](https://github.com/7h30th3r0n3/Evil-M5Project) |

@@ -1,0 +1,330 @@
+#ifndef _PINCFG_H_
+#define _PINCFG_H_
+
+#if defined(BOARD_WAVESHARE_P4_KNOB)
+#define BTN_PIN 35
+#else
+#define BTN_PIN 0
+#endif
+
+#if defined(BOARD_WAVESHARE_P4_KNOB)
+// Waveshare ESP32-P4-Knob-Touch-AMOLED-1.75 (ESP32-P4NRW32X). Wiring follows
+// Waveshare's pin_config.h and waveshare_boards 0.3.5; see
+// docs/WAVESHARE-P4-KNOB-175.md. The 2.4 GHz radio is a classic ESP32 on SDIO.
+#define BOARD_NAME "Waveshare ESP32-P4-Knob-Touch-AMOLED-1.75"
+#define BOARD_RADIO_AP_SURVEY_ONLY 1
+#define SCREEN_RES 466
+#define BOARD_HAS_AUDIO 1
+#define BOARD_HAS_SD 1
+// Voice Recorder: two microphones on the ES7210 (voice_recorder.cpp).
+#define BOARD_HAS_MIC 1
+// MP3 playback (libhelix, chmorgan__esp-libhelix-mp3 in CMakeLists.txt).
+#define BOARD_HAS_MP3 1
+// CO5300 on MIPI-DSI, one lane. The DSI PHY runs from on-chip LDO_VO3 (2.5 V).
+#define LCD_RESET 29
+#define LCD_DSI_LDO_CHANNEL 3
+#define LCD_DSI_LDO_MV 2500
+#define LCD_COL_OFFSET 6
+// CST9217 touch, ES8389, ES7210, AXP2101, PCF85063 and QMI8658 share this bus.
+#define IIC_SDA 7
+#define IIC_SCL 8
+#define TP_RESET 27
+#define TP_INT 26
+#define TP_I2C_ADDR 0x5A
+#define RTC_INT_PIN 3
+// The knob is two active-low direction switches, one pulse per detent.
+#define KNOB_CW_PIN 20
+#define KNOB_CCW_PIN 21
+// DRV8837 vibration motor: IN1 high + IN2 low runs it, both high brakes.
+#define HAPTIC_IN1_PIN 22
+#define HAPTIC_IN2_PIN 23
+// PWR reaches GPIO2 through an inverter (high while pressed) and AXP2101 PWRON.
+#define PWR_KEY_PIN 2
+// ES8389 DAC + NS4150B speaker amplifier; ES7210 microphones on DIN.
+#define AUDIO_I2S_MCK_IO 13
+#define AUDIO_I2S_BCK_IO 12
+#define AUDIO_I2S_WS_IO 10
+#define AUDIO_I2S_DO_IO 9
+#define AUDIO_I2S_DI_IO 11
+#define AUDIO_MUTE_PIN 53   // NS4150B enable, active high
+// TF card on SDMMC slot 0. Its IO supply, LDO_VO4, also powers the SDIO link
+// to the radio chip on slot 1; the board code owns that channel.
+#define SD_MMC_CLK_PIN 43
+#define SD_MMC_CMD_PIN 44
+#define SD_MMC_D0_PIN 39
+#define SD_MMC_D1_PIN 40
+#define SD_MMC_D2_PIN 41
+#define SD_MMC_D3_PIN 42
+#define SD_IO_LDO_CHANNEL 4
+// Radio chip (ESP32-D0WD-V3) on SDIO slot 1.
+#define COPROC_SDIO_CLK 18
+#define COPROC_SDIO_CMD 19
+#define COPROC_SDIO_D0 14
+#define COPROC_SDIO_D1 15
+#define COPROC_SDIO_D2 16
+#define COPROC_SDIO_D3 17
+#define COPROC_EN_PIN 54    // high = running
+#define COPROC_BOOT_PIN 6   // ESP32 GPIO0: low at reset = ROM download
+#elif defined(BOARD_WAVESHARE_185B)
+#define BOARD_NAME "Waveshare ESP32-S3-Touch-LCD-1.85B"
+#define SCREEN_RES 360
+#define BOARD_HAS_AUDIO 1
+#define BOARD_HAS_SD 1
+#define LCD_SDIO0 46
+#define LCD_SDIO1 45
+#define LCD_SDIO2 42
+#define LCD_SDIO3 41
+#define LCD_SCLK 40
+#define LCD_CS 21
+#define LCD_RESET 3
+#define LCD_BACKLIGHT 5
+#define LCD_TE 18
+#define IIC_SDA 11
+#define IIC_SCL 10
+#define TP_RESET 1
+#define TP_INT 4
+#define TP_I2C_ADDR 0x15
+#define SD_MMC_CLK_PIN 15
+#define SD_MMC_CMD_PIN 14
+#define SD_MMC_D0_PIN 16
+#define SD_MMC_D1_PIN 17
+#define SD_MMC_D2_PIN 12
+#define SD_MMC_D3_PIN 13
+#define AUDIO_I2S_MCK_IO 2
+#define AUDIO_I2S_BCK_IO 48
+#define AUDIO_I2S_WS_IO 38
+#define AUDIO_I2S_DO_IO 47
+#define AUDIO_MUTE_PIN 9
+#elif defined(BOARD_WAVESHARE_143C)
+// ESP32-S3-Touch-AMOLED-1.43C / 1.43C-EN (ESP32-S3-PICO-1-N8R8). Wiring follows
+// Waveshare's 1.43C schematic and BSP; see docs/WAVESHARE-AMOLED-143C.md. The
+// 16 MB ESP32-S3-Touch-AMOLED-1.43 / 1.43-B is a different board and pin map.
+#define BOARD_NAME "Waveshare ESP32-S3-Touch-AMOLED-1.43C"
+#define SCREEN_RES 466
+#define BOARD_HAS_AUDIO 1
+#define BOARD_HAS_SD 0
+#define LCD_SDIO0 9
+#define LCD_SDIO1 10
+#define LCD_SDIO2 11
+#define LCD_SDIO3 12
+#define LCD_SCLK 14
+#define LCD_CS 15
+#define LCD_RESET 13
+#define LCD_TE 8
+// The panel is mounted rotated 180 degrees: MADCTL 0xC0 moves the 466 visible
+// columns of the 480-column source driver from offset 6 to offset 8.
+#define LCD_COL_OFFSET 8
+// CST820 touch, ES8311 speaker codec and ES7210 microphone ADC share this bus.
+#define IIC_SDA 47
+#define IIC_SCL 48
+#define TP_RESET 16
+#define TP_INT 17
+#define TP_I2C_ADDR 0x15
+#define AUDIO_I2S_MCK_IO 38
+#define AUDIO_I2S_BCK_IO 39
+#define AUDIO_I2S_WS_IO 40
+#define AUDIO_I2S_DO_IO 41
+#define AUDIO_I2S_DI_IO 42  // ES7210 microphones; not used by this firmware
+#define AUDIO_MUTE_PIN 46   // NS4150B speaker amplifier enable, active high
+#define AUDIO_LDO_EN 18     // codec supply enable, active high
+#define BATTERY_ADC_PIN 4   // ADC1_CH3 through a 1:2 divider
+#define CHARGE_STATUS_PIN 7 // ETA6098 STAT, low while charging
+#define BOARD_LED_PIN 5     // CHG LED, low = lit; driven by firmware
+#elif defined(BOARD_WATCHER)
+#define BOARD_NAME "Seeed SenseCAP Watcher"
+#define SCREEN_RES 412
+#define BOARD_HAS_AUDIO 1
+#define BOARD_HAS_SD 1
+#define BOARD_SD_SPI 1
+#define WATCHER_GPS_RX 19
+#define WATCHER_GPS_TX 20
+#define AUDIO_I2S_MCK_IO 10
+#define AUDIO_I2S_BCK_IO 11
+#define AUDIO_I2S_WS_IO 12
+#define AUDIO_I2S_DO_IO 16
+#elif defined(BOARD_M5DIAL)
+#define BOARD_NAME "M5Stack Dial"
+#define SCREEN_RES 240
+#define BOARD_HAS_AUDIO 1
+#define BOARD_HAS_SD 0
+#define DIAL_SDA 11
+#define DIAL_SCL 12
+#define DIAL_BACKLIGHT 9
+#define DIAL_HOLD 46
+#define DIAL_BUTTON 42
+#define DIAL_ENCODER_A 41
+#define DIAL_ENCODER_B 40
+#define DIAL_BUZZER 3
+#elif defined(BOARD_LILYGO_175)
+// H0175Y003AM round panel. Pins/geometry match the owner's tested 0.13.20 BIN.
+#define BOARD_NAME "LilyGo T-Display-S3-AMOLED-1.75"
+#define SCREEN_RES 466
+#define BOARD_HAS_AUDIO 0
+#define BOARD_HAS_SD 1
+#define BOARD_SD_SPI 1
+#define LCD_SDIO0 11
+#define LCD_SDIO1 13
+#define LCD_SDIO2 14
+#define LCD_SDIO3 15
+#define LCD_SCLK 12
+#define LCD_CS 10
+#define LCD_RESET 17
+#define LCD_ENABLE 16
+#define LCD_COL_OFFSET 6
+#define IIC_SDA 7
+#define IIC_SCL 6
+#define TP_RESET -1
+#define TP_INT 9
+#define TP_I2C_ADDR 0x5A
+#define LILY_SD_CS 38
+#define LILY_SD_MOSI 39
+#define LILY_SD_MISO 40
+#define LILY_SD_SCLK 41
+#elif defined(BOARD_CROWPANEL_21)
+#define BOARD_NAME "Elecrow CrowPanel 2.1 Rotary"
+#define SCREEN_RES 480
+#define BOARD_HAS_AUDIO 0
+#define BOARD_HAS_SD 0
+#define CROW_SDA 38
+#define CROW_SCL 39
+#define CROW_BACKLIGHT 6
+#define CROW_ENCODER_A 42
+#define CROW_ENCODER_B 4
+#define CROW_EXPANDER_ADDR 0x21
+#define CROW_TOUCH_ADDR 0x15
+#elif defined(BOARD_RADAR_LITE)
+#define BOARD_NAME "Waveshare ESP32-S3-LCD-1.28 Lite"
+#define SCREEN_RES 240
+#define BOARD_HAS_AUDIO 0
+#define BOARD_HAS_SD 0
+#define LITE_BACKLIGHT 40
+#elif defined(BOARD_XIAO_ROUND)
+#define BOARD_NAME "Seeed XIAO ESP32-S3 + Round Display"
+#define SCREEN_RES 240
+#define BOARD_HAS_AUDIO 0
+#define BOARD_HAS_SD 1
+#define BOARD_SD_SPI 1
+#define XIAO_SD_CS 3
+#define XIAO_LCD_CS 2
+#define XIAO_BACKLIGHT 43
+#define XIAO_TOUCH_INT 44
+#define XIAO_SDA 5
+#define XIAO_SCL 6
+#elif defined(BOARD_STOPWATCH)
+#define BOARD_NAME "M5Stack StopWatch C152"
+#define SCREEN_RES 466
+#define BOARD_HAS_AUDIO 0
+#define BOARD_HAS_SD 0
+#elif defined(BOARD_AMOLED_175C) || defined(BOARD_AMOLED_175)
+// The two AMOLED variants share their buses but not reset, SD or MCLK wiring.
+// Official non-C schematic/BSP reference: docs/WAVESHARE-AMOLED-175.md.
+
+#ifdef BOARD_AMOLED_175
+#ifdef BOARD_GPS_LC76G
+#define BOARD_NAME "Waveshare ESP32-S3-Touch-AMOLED-1.75-G"
+#else
+#define BOARD_NAME "Waveshare ESP32-S3-Touch-AMOLED-1.75"
+#endif
+#define LCD_RESET 39
+#define TP_RESET 40
+#define AUDIO_I2S_MCK_IO 42
+#define BOARD_HAS_SD 1
+#define SD_MMC_CLK_PIN 2
+#define SD_MMC_CMD_PIN 1
+#define SD_MMC_D0_PIN 3
+#else
+#define BOARD_NAME "Waveshare ESP32-S3-Touch-AMOLED-1.75C"
+#define LCD_RESET 1
+#define TP_RESET 2
+#define AUDIO_I2S_MCK_IO 16
+#define BOARD_HAS_SD 0
+#endif
+#define SCREEN_RES 466
+#define BOARD_HAS_AUDIO 0
+
+#define LCD_SDIO0 4
+#define LCD_SDIO1 5
+#define LCD_SDIO2 6
+#define LCD_SDIO3 7
+#define LCD_SCLK 38
+#define LCD_CS 12
+#define LCD_COL_OFFSET 6
+
+// Touch, AXP2101 and QMI8658 share this bus. Probe optional RTC revisions.
+#define IIC_SDA 15
+#define IIC_SCL 14
+#define TP_INT 11
+#define TP_I2C_ADDR 0x5A
+
+// Waveshare official 07_ES8311 example / pin_config.h.
+#define AUDIO_I2S_BCK_IO 9
+#define AUDIO_I2S_WS_IO 45
+#define AUDIO_I2S_DO_IO 8
+#define AUDIO_MUTE_PIN 46
+
+#else
+
+#ifdef BOARD_GUITION_185_BETA
+#define BOARD_NAME "Guition / Surenoo JC3636W518 Beta 1"
+#else
+#define BOARD_NAME "Spotpear JC3636W518"
+#endif
+#define SCREEN_RES 360
+#define BOARD_HAS_AUDIO 0
+#define BOARD_HAS_SD 1
+
+#define TFT_BLK 15
+
+#define TFT_RST 47
+#define TFT_CS 10
+#define TFT_SCK 9
+#define TFT_SDA0 11
+#define TFT_SDA1 12
+#define TFT_SDA2 13
+#define TFT_SDA3 14
+
+#define TOUCH_PIN_NUM_I2C_SCL 8
+#define TOUCH_PIN_NUM_I2C_SDA 7
+#define TOUCH_PIN_NUM_INT 41
+#define TOUCH_PIN_NUM_RST 40
+
+#define SD_MMC_D0_PIN 2
+#define SD_MMC_D1_PIN 1
+#define SD_MMC_D2_PIN 6
+#define SD_MMC_D3_PIN 5
+#define SD_MMC_CLK_PIN 3
+#define SD_MMC_CMD_PIN 4
+
+#define AUDIO_I2S_MCK_IO -1 // MCK
+#define AUDIO_I2S_BCK_IO 18 // BCK
+#define AUDIO_I2S_WS_IO 16  // LCK
+#define AUDIO_I2S_DO_IO 17  // DIN
+#define AUDIO_MUTE_PIN 48   // 低电平静音
+
+#define MIC_I2S_WS 45
+#define MIC_I2S_SD 46
+#define MIC_I2S_SCK 42
+
+#endif
+
+// A microphone driver (Voice Recorder). Only the P4 Knob has one so far.
+#ifndef BOARD_HAS_MIC
+#define BOARD_HAS_MIC 0
+#endif
+
+// An MP3 decoder in the WAV player (libhelix). Only the P4 Knob wires it so far.
+#ifndef BOARD_HAS_MP3
+#define BOARD_HAS_MP3 0
+#endif
+
+#if (defined(BOARD_AMOLED_175) && !defined(BOARD_GPS_LC76G)) || defined(BOARD_WAVESHARE_185B)
+// Optional, user-enabled NMEA input on the non-C expansion header.
+#define BOARD_GPS_UART 1
+#endif
+#if (defined(BOARD_WATCHER) || defined(BOARD_AMOLED_175) || defined(BOARD_WAVESHARE_185B)) && BOARD_HAS_SD
+#define BOARD_HAS_GPS 1
+#else
+#define BOARD_HAS_GPS 0
+#endif
+
+#endif

@@ -1,0 +1,3 @@
+# Preserve the byte-for-byte source checkpoint across platforms.
+* -text
+*.bin binary
